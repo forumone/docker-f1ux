@@ -134,7 +134,7 @@ builtins.mapAttrs
         ];
       in
       dockerTools.buildLayeredImage {
-        name = "f1ux";
+        name = "forumone/f1ux";
         inherit tag;
 
         # Force nix to set the creation date to now for better discoverability by install
