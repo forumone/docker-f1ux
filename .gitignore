@@ -1,0 +1,7 @@
+# nix-build's conventional output is named "result" and sometimes numbered if multiple
+# outputs are built
+result*
+
+# This file can be used during development to save the interpreter derivations, but it is
+# not useful when stored in Git.
+roots
