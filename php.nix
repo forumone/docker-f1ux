@@ -36,7 +36,9 @@ let
         else "--with-libxml-dir=${libxml2.dev}";
     in
     stdenv.mkDerivation {
-      name = "php-${name}";
+      pname = "php";
+      inherit version;
+
       src = fetchurl {
         url = "https://www.php.net/distributions/php-${version}.tar.bz2";
         inherit sha256;

@@ -34,7 +34,9 @@ let
       ];
     in
     stdenv.mkDerivation {
-      name = "node-${name}";
+      pname = "node";
+      inherit version;
+
       src = fetchurl {
         url = "https://nodejs.org/dist/${version}/node-${version}.tar.xz";
         sha256 = sha256;

@@ -34,7 +34,9 @@ let
       versionKey = "${name}.0";
     in
     stdenv.mkDerivation {
-      name = "ruby-${name}";
+      pname = "ruby";
+      inherit version;
+
       inherit src;
 
       # Passes -j$(nproc) to make during the build phase
