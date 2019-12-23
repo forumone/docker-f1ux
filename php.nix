@@ -13,9 +13,8 @@ let
     { version = "7.3.12"; sha256 = "d317b029f991410578cc38ba4b76c9f764ec29c67e7124e1fec57bceb3ad8c39"; }
     { version = "7.2.25"; sha256 = "7cb336b1ed0f9d87f46bbcb7b3437ee252d0d5060c0fb1a985adb6cbc73a6b9e"; }
     { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; }
-
-    # libxml2 detection broken for some reason
-    # { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
+    { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
+    { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; }
   ];
 
   mkPhpDerivation =
@@ -26,9 +25,12 @@ let
 
       # This derivation uses static links to reduce the build output's size
       inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
-      inherit (pkgs.pkgsStatic) pkgconfig libxml2 bzip2 oniguruma openssl;
-      inherit (pkgs) zlib;
+      inherit (pkgs.pkgsStatic) pkgconfig libxml2;
 
+      libxmlFlag =
+        if lib.versionAtLeast version "7.1"
+        then "--enable-libxml"
+        else "--with-libxml-dir=${libxml2.dev}";
     in
     stdenv.mkDerivation {
       name = "php-${name}";
@@ -40,15 +42,15 @@ let
       enableParallelBuilding = true;
       static = true;
 
+      buildInputs = with (pkgs.pkgsStatic); [
+        libxml2
+        zlib
+      ];
+
       nativeBuildInputs = with (pkgs.pkgsStatic); [
         pkgconfig
         autoconf
-        libxml2
-        (lib.getDev libxml2)
       ];
-
-      CFLAGS = "-I${libxml2.dev}/include";
-      LDFLAGS = "-L${libxml2.out}/lib";
 
       # 1. Omit the "@CONFIGURE_*@" flags (these are output by php -i) in order to further
       #    reduce this derivation's output size
@@ -61,7 +63,6 @@ let
             --replace '@CONFIGURE_OPTIONS@' ""
         done
 
-        addPkgConfigPath ${lib.getDev libxml2}
         addToSearchPath PATH ${lib.getDev libxml2}/bin
 
         configureFlags+=(--includedir=$dev/include)
@@ -82,7 +83,7 @@ let
 
         # Enable filter and libxml
         "--with-filter=static"
-        "--enable-libxml"
+        libxmlFlag
 
         # These are needed by Composer
         "--enable-phar=static"
