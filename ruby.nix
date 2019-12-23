@@ -29,14 +29,6 @@ let
         inherit sha256;
       };
 
-      # Ruby's configure has trouble with static extensions, so we just point it to these
-      # build paths directly.
-      # We only use zlib and openssl since they're needed for `gem install` and friends
-      environment = with (pkgs.pkgsStatic); {
-        CFLAGS = "-I${zlib.dev}/include -I${openssl.dev}/include";
-        LDFLAGS = "-L${zlib.static}/lib -L${openssl.out}/lib";
-      };
-
       # Ruby gems are packaged by X.Y.0 versions, no matter what the actual patch-level
       # version is, so we can just statically predict it here
       versionKey = "${name}.0";
@@ -48,8 +40,10 @@ let
       # Passes -j$(nproc) to make during the build phase
       enableParallelBuilding = true;
 
-      CFLAGS = environment.CFLAGS;
-      LDFLAGS = environment.LDFLAGS;
+      buildInputs = with (pkgs.pkgsStatic); [
+        openssl
+        zlib
+      ];
 
       configureFlags = [
         # Don't use GCC for the JIT
