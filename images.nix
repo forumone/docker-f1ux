@@ -6,12 +6,12 @@ let
   pkgs = import <nixpkgs> {};
   inherit (pkgs) pkgsStatic runCommand lib dockerTools;
 
-  util = import ../util.nix;
+  util = import ./util.nix;
 
   # Import the various node/php/ruby versions we support
-  nodeVersions = import ../node.nix;
-  phpVersions = import ../php.nix;
-  rubyVersions = import ../ruby.nix;
+  nodeVersions = import ./node.nix;
+  phpVersions = import ./php.nix;
+  rubyVersions = import ./ruby.nix;
 
   # Builds the attrset of tag => { node grunt php composer ruby bundler } that varies
   # based on the node/php/ruby versions
@@ -21,7 +21,7 @@ let
       versions = nodeVersions;
       build = node: {
         inherit node;
-        grunt = import ../grunt.nix { inherit node; };
+        grunt = import ./grunt.nix { inherit node; };
       };
     }
     {
@@ -29,7 +29,7 @@ let
       versions = phpVersions;
       build = php: {
         inherit php;
-        composer = import ../composer.nix { inherit php; };
+        composer = import ./composer.nix { inherit php; };
       };
     }
     {
@@ -37,7 +37,7 @@ let
       versions = rubyVersions;
       build = ruby: {
         inherit ruby;
-        bundler = import ../bundler.nix { inherit ruby; };
+        bundler = import ./bundler.nix { inherit ruby; };
       };
     }
   ];
