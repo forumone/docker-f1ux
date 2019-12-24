@@ -23,16 +23,20 @@ let
 
       # This derivation uses static links to reduce the build output's size
       inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
-      inherit (pkgs.pkgsStatic) pkgconfig libxml2;
+      inherit (pkgs.pkgsStatic) pkgconfig libxml2 zlib;
 
       # Static oniguruma (this is pending an upstream merge in nixpkgs)
       oniguruma = pkgs.pkgsStatic.oniguruma.overrideAttrs (_: {
         cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"];
       });
 
+      libzip = pkgs.pkgsStatic.libzip.overrideAttrs ({ cmakeFlags ? [], ... }: {
+        cmakeFlags = cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_REGRESS=OFF" ];
+      });
+
       libxmlFlag =
         if lib.versionAtLeast version "7.1"
-        then "--enable-libxml"
+        then "--enable-libxml=static"
         else "--with-libxml-dir=${libxml2.dev}";
     in
     stdenv.mkDerivation {
@@ -49,8 +53,10 @@ let
 
       buildInputs = with (pkgs.pkgsStatic); [
         libxml2
-        zlib
+        libzip
         oniguruma
+        openssl
+        zlib
       ];
 
       nativeBuildInputs = with (pkgs.pkgsStatic); [
@@ -88,13 +94,21 @@ let
         "--disable-all"
 
         # Enable filter and libxml
-        "--with-filter=static"
+        "--enable-filter=static"
         libxmlFlag
 
         # These are needed by Composer
         "--enable-phar=static"
         "--enable-mbstring=static"
         "--enable-json=static"
+        "--with-openssl"
+
+        # Pattern Lab
+        "--enable-tokenizer"
+        "--enable-hash=static"
+        "--enable-ctype=static"
+        "--enable-zip=static"
+        "--with-zlib-dir=${zlib.dev}"
       ];
 
       # Move php-config and php-ize to the $dev output
