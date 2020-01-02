@@ -25,11 +25,15 @@ let
       inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
       inherit (pkgs.pkgsStatic) pkgconfig libxml2 zlib;
 
-      # Static oniguruma (this is pending an upstream merge in nixpkgs)
+      # Static oniguruma - this override is here because we are waiting on these PRs:
+      # * https://github.com/NixOS/nixpkgs/pull/75950 (static oniguruma)
+      # * https://github.com/NixOS/nixpkgs/pull/76659 (generalizes the above for CMake-based libraries)
       oniguruma = pkgs.pkgsStatic.oniguruma.overrideAttrs (_: {
         cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"];
       });
 
+      # This is not yet in a PR, but we should likely wait until nixpkgs#76659 is merged
+      # in order to avoid
       libzip = pkgs.pkgsStatic.libzip.overrideAttrs ({ cmakeFlags ? [], ... }: {
         cmakeFlags = cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_REGRESS=OFF" ];
       });
