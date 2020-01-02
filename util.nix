@@ -63,7 +63,7 @@ let
   # Usage:
   #   crossProduct (x: y: ...) "" [[...] [...] [...]]
   #
-  # Computs the cross product of an arbitrary number of lists. Generalization of nixpkgs'
+  # Computes the cross product of an arbitrary number of lists. Generalization of nixpkgs'
   # lib.crossLists.
   crossProduct = f: nil: lists:
     builtins.foldl'
