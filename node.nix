@@ -16,9 +16,7 @@ let
       # Import nixpkgs and the standard environment
       pkgs = import <nixpkgs> {};
 
-      # This should be a static python, but for some reason that breaks
-      inherit (pkgs) python2 pkgsStatic;
-      inherit (pkgsStatic) stdenv fetchurl;
+      inherit (pkgs) stdenv fetchurl python2;
 
       # Use specific configure flags because stdenv's defaults confuse the custom
       # configure script.
@@ -26,15 +24,14 @@ let
         # Build to the $out path
         "--prefix" "$out"
 
-        # Statically link
-        "--fully-static"
-
         # Don't generate v8 snapshots
         "--without-snapshot"
       ];
     in
     stdenv.mkDerivation {
-      name = "node-${name}";
+      pname = "node";
+      inherit version;
+
       src = fetchurl {
         url = "https://nodejs.org/dist/${version}/node-${version}.tar.xz";
         sha256 = sha256;
@@ -42,7 +39,6 @@ let
 
       enableParallelBuilding = true;
 
-      buildInputs = [python2];
       nativeBuildInputs = [python2];
 
       # Point build scripts to the exact Nix store paths rather than /usr/bin/env

@@ -1,7 +1,7 @@
 let
   lib = import <nixpkgs/lib>;
 
-  # Example usage:
+  # Usage:
   #   builtins..map (mkVersion { key = str: ...; }) [...]
   #
   # This creates a helper function that extracts a key from a version, and is intended
@@ -46,7 +46,73 @@ let
       versionAttrs = mkVersions { inherit key; } versions;
     in
     builtins.mapAttrs (lib.const mkDerivation) versionAttrs;
+
+  # Usage:
+  #   attrsToList { ... }
+  #
+  # Converts an attrset to a list of name/value pairs.
+  #
+  # The following identities should hold for all x:
+  # 1. attrsToList (builtins.listToAttrs x) = x
+  # 2. builtins.listToAttrs (attrsToList x) = x
+  attrsToList = attrs:
+    builtins.map
+      (name: { inherit name; value = attrs.${name}; })
+      (builtins.attrNames attrs);
+
+  # Usage:
+  #   crossProduct (x: y: ...) "" [[...] [...] [...]]
+  #
+  # Computes the cross product of an arbitrary number of lists. Generalization of nixpkgs'
+  # lib.crossLists.
+  crossProduct = f: nil: lists:
+    builtins.foldl'
+      (x: y: lib.crossLists f [x y])
+      [nil]
+      lists;
+
+  # Usage:
+  #   join "foo" "bar"
+  #
+  # Combines the two arguments with a hyphen. If x is the empty string, just outputs y.
+  join = x: y:
+    if x != "" then "${x}-${y}"
+    else y;
+
+  # Usage:
+  #   tagMatrix [ { name = ...; versions = [...]; build = x: { ... }; }]
+  #
+  # Creates an attrset from a list of descriptions on how to produce a set of values from
+  # a given version. This function is primarily intended for the case of building a Docker
+  # image where the attrset's names represent the tags to use, and the values are an
+  # attrset of derivations that depend on the elements.
+  tagMatrix = builds:
+    let
+      # The default build function simply
+      mkBuild = name: value: builtins.listToAttrs [
+        { inherit name value; }
+      ];
+
+      mapper = { name, versions, build ? mkBuild name }:
+        attrsToList (lib.mapAttrs'
+          (key: drv: {
+            name = join name key;
+            value = build drv;
+          })
+          versions);
+
+      inputs = builtins.map mapper builds;
+
+      product = crossProduct
+        (x: y: {
+          name = join x.name y.name;
+          value = x.value // y.value;
+        })
+        { name = ""; value = {}; }
+        inputs;
+    in
+    builtins.listToAttrs product;
 in
 {
-  inherit mkVersion mkVersions mkMatrix;
+  inherit mkVersion mkVersions mkMatrix attrsToList crossProduct join tagMatrix;
 }

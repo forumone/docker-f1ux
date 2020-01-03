@@ -6,16 +6,13 @@ let
   util = import ./util.nix;
 
   versions = [
-    # bleah, oniguruma
-    # { version = "7.4.0"; sha256 = "bf206be96a39e643180013df39ddcd0493966692a2422c4b7d3355b6a15a01c0"; }
-
     # The sha256 digest here is for the .tar.bz2 files of the PHP source distribution
-    { version = "7.3.12"; sha256 = "d317b029f991410578cc38ba4b76c9f764ec29c67e7124e1fec57bceb3ad8c39"; }
-    { version = "7.2.25"; sha256 = "7cb336b1ed0f9d87f46bbcb7b3437ee252d0d5060c0fb1a985adb6cbc73a6b9e"; }
+    { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; }
+    { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; }
+    { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; }
     { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; }
-
-    # libxml2 detection broken for some reason
-    # { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
+    { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
+    { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; }
   ];
 
   mkPhpDerivation =
@@ -26,12 +23,30 @@ let
 
       # This derivation uses static links to reduce the build output's size
       inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
-      inherit (pkgs.pkgsStatic) pkgconfig libxml2 bzip2 oniguruma openssl;
-      inherit (pkgs) zlib;
+      inherit (pkgs.pkgsStatic) pkgconfig libxml2 zlib;
 
+      # Static oniguruma - this override is here because we are waiting on these PRs:
+      # * https://github.com/NixOS/nixpkgs/pull/75950 (static oniguruma)
+      # * https://github.com/NixOS/nixpkgs/pull/76659 (generalizes the above for CMake-based libraries)
+      oniguruma = pkgs.pkgsStatic.oniguruma.overrideAttrs (_: {
+        cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"];
+      });
+
+      # This is not yet in a PR, but we should likely wait until nixpkgs#76659 is merged
+      # in order to avoid
+      libzip = pkgs.pkgsStatic.libzip.overrideAttrs ({ cmakeFlags ? [], ... }: {
+        cmakeFlags = cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_REGRESS=OFF" ];
+      });
+
+      libxmlFlag =
+        if lib.versionAtLeast version "7.1"
+        then "--enable-libxml=static"
+        else "--with-libxml-dir=${libxml2.dev}";
     in
     stdenv.mkDerivation {
-      name = "php-${name}";
+      pname = "php";
+      inherit version;
+
       src = fetchurl {
         url = "https://www.php.net/distributions/php-${version}.tar.bz2";
         inherit sha256;
@@ -40,15 +55,18 @@ let
       enableParallelBuilding = true;
       static = true;
 
+      buildInputs = with (pkgs.pkgsStatic); [
+        libxml2
+        libzip
+        oniguruma
+        openssl
+        zlib
+      ];
+
       nativeBuildInputs = with (pkgs.pkgsStatic); [
         pkgconfig
         autoconf
-        libxml2
-        (lib.getDev libxml2)
       ];
-
-      CFLAGS = "-I${libxml2.dev}/include";
-      LDFLAGS = "-L${libxml2.out}/lib";
 
       # 1. Omit the "@CONFIGURE_*@" flags (these are output by php -i) in order to further
       #    reduce this derivation's output size
@@ -61,7 +79,6 @@ let
             --replace '@CONFIGURE_OPTIONS@' ""
         done
 
-        addPkgConfigPath ${lib.getDev libxml2}
         addToSearchPath PATH ${lib.getDev libxml2}/bin
 
         configureFlags+=(--includedir=$dev/include)
@@ -81,13 +98,21 @@ let
         "--disable-all"
 
         # Enable filter and libxml
-        "--with-filter=static"
-        "--enable-libxml"
+        "--enable-filter=static"
+        libxmlFlag
 
         # These are needed by Composer
         "--enable-phar=static"
         "--enable-mbstring=static"
         "--enable-json=static"
+        "--with-openssl"
+
+        # Pattern Lab
+        "--enable-tokenizer"
+        "--enable-hash=static"
+        "--enable-ctype=static"
+        "--enable-zip=static"
+        "--with-zlib-dir=${zlib.dev}"
       ];
 
       # Move php-config and php-ize to the $dev output
