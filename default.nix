@@ -1,30 +1,45 @@
 # How to build this file:
 #   nix-build
 #
-# This is the default file used by nix-build. The result of building this file is a
-# directory, named result/ by convention, that contains symbolic links to each of the
-# Docker image tarballs produced by the derivations in images.nix.
+# How to build this file, selecting only one set of images:
+#   nix-build --argstr key f1ux
 #
-# The directory's contents can be inspected or loaded into Docker via "docker load <$tag.tag.gz".
+# This is the default file used by nix-build. The result of building this file is a
+# shell script, symbolically linked in ./result, that loads all of the requested images
+# into Docker.
+{ key ? null }:
 let
   pkgs = import <nixpkgs> {};
-  inherit (pkgs) runCommand lib;
+  inherit (pkgs) writeShellScript lib;
 
-  images = import ./images.nix;
+  imageSets = import ./images;
 
-  # Creates a line of shell script that links the image pointed to by tag into $out
-  linkImage = tag: ''
-    ln -s ${images.${tag}} $out/${tag}.tar.gz
-  '';
+  # Loads a single set of images from the image sets in ./images/default.nix
+  loadImages = images:
+    builtins.concatStringsSep
+      "\n"
+      (lib.mapAttrsToList (_: image: "docker load <${image}") images);
 
-  # Creates the bash code necessary to link all image tags into $out - this has the effect
-  # of asking Nix to build all image variations.
-  linkAllImages = builtins.concatStringsSep
-    "\n"
-    (builtins.map linkImage (builtins.attrNames images));
+  loadAllImages = imagesets:
+    builtins.concatStringsSep
+      ""
+      (lib.mapAttrsToList
+        (name: images:
+          ''
+            # ${name}
+            ${loadImages images}
+          '')
+        imagesets);
+
+  isRequestedImageSet =
+    let
+      namePredicate =
+        if key == null
+        then lib.const true
+        else name: name == key;
+    in
+    name: _: namePredicate name;
+
+  scriptText = loadAllImages (lib.filterAttrs isRequestedImageSet imageSets);
 in
-runCommand "images" {} ''
-  mkdir -p $out
-
-  ${linkAllImages}
-''
+writeShellScript "loadAll" scriptText
