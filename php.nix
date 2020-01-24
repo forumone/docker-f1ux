@@ -21,27 +21,19 @@ let
       # Import nixpkgs and the standard build environment
       pkgs = import <nixpkgs> {};
 
-      # This derivation uses static links to reduce the build output's size
-      inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
-      inherit (pkgs.pkgsStatic) pkgconfig libxml2 zlib;
-
-      # Static oniguruma - this override is here because we are waiting on these PRs:
-      # * https://github.com/NixOS/nixpkgs/pull/75950 (static oniguruma)
-      # * https://github.com/NixOS/nixpkgs/pull/76659 (generalizes the above for CMake-based libraries)
-      oniguruma = pkgs.pkgsStatic.oniguruma.overrideAttrs (_: {
-        cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"];
-      });
-
-      # This is not yet in a PR, but we should likely wait until nixpkgs#76659 is merged
-      # in order to avoid
-      libzip = pkgs.pkgsStatic.libzip.overrideAttrs ({ cmakeFlags ? [], ... }: {
-        cmakeFlags = cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_REGRESS=OFF" ];
-      });
+      inherit (pkgs) stdenv lib fetchurl;
+      inherit (pkgs) pkgconfig libxml2 zlib;
 
       libxmlFlag =
         if lib.versionAtLeast version "7.1"
         then "--enable-libxml=static"
         else "--with-libxml-dir=${libxml2.dev}";
+
+      # 5.6 needs a really old OpenSSL version - but let's keep it limited to just that.
+      openssl =
+        if lib.versionAtLeast version "7.0"
+        then pkgs.openssl
+        else pkgs.openssl_1_0_2;
     in
     stdenv.mkDerivation {
       pname = "php";
@@ -53,9 +45,8 @@ let
       };
 
       enableParallelBuilding = true;
-      static = true;
 
-      buildInputs = with (pkgs.pkgsStatic); [
+      buildInputs = with pkgs; [
         libxml2
         libzip
         oniguruma
@@ -63,14 +54,14 @@ let
         zlib
       ];
 
-      nativeBuildInputs = with (pkgs.pkgsStatic); [
+      nativeBuildInputs = with pkgs; [
         pkgconfig
         autoconf
       ];
 
       # 1. Omit the "@CONFIGURE_*@" flags (these are output by php -i) in order to further
       #    reduce this derivation's output size
-      # 2. Manually add libxml2 to PKG_CONFIG_PATH
+      # 2. Manually add libxml2's utilities to $PATH
       # 3. Regenerate ./configure
       preConfigure = ''
         for offender in main/build-defs.h.in scripts/php-config.in; do
@@ -115,7 +106,7 @@ let
         "--with-zlib-dir=${zlib.dev}"
       ];
 
-      # Move php-config and php-ize to the $dev output
+      # Move php-config and php-ize to the $dev output (see below)
       postInstall = ''
         mkdir -p $dev/bin
         for tool in phpize php-config; do
