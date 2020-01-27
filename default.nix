@@ -1,45 +1,31 @@
-# How to build this file:
+# Build all images (f1ux and gesso 2.x):
 #   nix-build
 #
-# How to build this file, selecting only one set of images:
-#   nix-build --argstr key f1ux
+# Build only f1ux images:
+#   nix-build -A f1ux
 #
-# This is the default file used by nix-build. The result of building this file is a
-# shell script, symbolically linked in ./result, that loads all of the requested images
-# into Docker.
-{ key ? null }:
+# Build only gesso 2.x images:
+#   nix-build -A gesso2
 let
-  pkgs = import <nixpkgs> {};
-  inherit (pkgs) writeShellScript lib;
+  pkgs = import ./pkgs.nix;
+  inherit (pkgs) lib f1ux gesso2;
 
-  imageSets = import ./images;
+  # Retrieves the Docker images from an attrset (i.e., pkgs.f1ux or pkgs.gesso2)
+  getImages = imageSet:
+    builtins.filter
+      lib.isDerivation
+      (builtins.attrValues imageSet);
 
-  # Loads a single set of images from the image sets in ./images/default.nix
-  loadImages = images:
-    builtins.concatStringsSep
-      "\n"
-      (lib.mapAttrsToList (_: image: "docker load <${image}") images);
+  # Single line of shell script to load a Docker image
+  loadImage = drv: "docker load <${drv}";
 
-  loadAllImages = imagesets:
-    builtins.concatStringsSep
-      ""
-      (lib.mapAttrsToList
-        (name: images:
-          ''
-            # ${name}
-            ${loadImages images}
-          '')
-        imagesets);
-
-  isRequestedImageSet =
-    let
-      namePredicate =
-        if key == null
-        then lib.const true
-        else name: name == key;
-    in
-    name: _: namePredicate name;
-
-  scriptText = loadAllImages (lib.filterAttrs isRequestedImageSet imageSets);
+  # Creates a shell script to load the image sets passed in as imageSets
+  loadImages = imageSet:
+      pkgs.writeShellScript
+        "loadImages"
+        (lib.concatMapStringsSep "\n" loadImage (getImages imageSet));
 in
-writeShellScript "loadAll" scriptText
+{
+  f1ux = loadImages f1ux;
+  gesso2 = loadImages gesso2;
+}

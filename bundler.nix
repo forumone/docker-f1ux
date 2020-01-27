@@ -1,13 +1,14 @@
-# Function to install Bundler 2 using the custom Ruby install
-{ ruby }:
+# Installs bundler 2 using the overlay's ruby
+{
+  ruby,
+  buildRubyGem,
+}:
 let
-  pkgs = import <nixpkgs> {};
-
   gemName = "bundler";
   version = "2.0.2";
   sha256 = "4c2ae1fce8a072b832ac7188f1e530a7cff8f0a69d8a9621b32d1407db00a2d0";
 in
-pkgs.buildRubyGem {
+buildRubyGem {
   inherit ruby;
 
   # Metadata for this gem derivation

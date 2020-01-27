@@ -1,39 +1,30 @@
-# How to build PHP from this file:
-#   nix-build php.nix -A \"7.1\"
-#
-# The escapes are needed since "7.1" doesn't follow Nix's normal rules for attribute names
+{
+  # Nix library elements
+  stdenv, lib, fetchurl
+
+  # Build tools
+, pkgconfig, autoconf
+
+  # Build dependencies
+, libxml2, libzip, oniguruma, openssl, openssl_1_0_2, zlib
+
+  # Composer and friends
+, phpPackages
+}:
 let
-  util = import ./util.nix;
-
-  versions = [
-    # The sha256 digest here is for the .tar.bz2 files of the PHP source distribution
-    { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; }
-    { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; }
-    { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; }
-    { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; }
-    { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
-    { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; }
-  ];
-
-  mkPhpDerivation =
-    { name, version, sha256 }:
+  generic =
+    { version, sha256 }:
     let
-      # Import nixpkgs and the standard build environment
-      pkgs = import <nixpkgs> {};
-
-      inherit (pkgs) stdenv lib fetchurl;
-      inherit (pkgs) pkgconfig libxml2 zlib;
-
       libxmlFlag =
         if lib.versionAtLeast version "7.1"
         then "--enable-libxml=static"
         else "--with-libxml-dir=${libxml2.dev}";
 
-      # 5.6 needs a really old OpenSSL version - but let's keep it limited to just that.
-      openssl =
+      # Use older OpenSSL for 5.6 - it doesn't appear to be compatible with 1.1.
+      sslpkg =
         if lib.versionAtLeast version "7.0"
-        then pkgs.openssl
-        else pkgs.openssl_1_0_2;
+        then openssl
+        else openssl_1_0_2;
     in
     stdenv.mkDerivation {
       pname = "php";
@@ -46,15 +37,15 @@ let
 
       enableParallelBuilding = true;
 
-      buildInputs = with pkgs; [
+      buildInputs = [
         libxml2
         libzip
         oniguruma
-        openssl
+        sslpkg
         zlib
       ];
 
-      nativeBuildInputs = with pkgs; [
+      nativeBuildInputs = [
         pkgconfig
         autoconf
       ];
@@ -106,6 +97,10 @@ let
         "--with-zlib-dir=${zlib.dev}"
       ];
 
+      passthru = {
+        dockerKey = "php-${lib.versions.majorMinor version}";
+      };
+
       # Move php-config and php-ize to the $dev output (see below)
       postInstall = ''
         mkdir -p $dev/bin
@@ -118,9 +113,25 @@ let
       # any extensions in a Gesso image)
       outputs = [ "out" "dev" ];
     };
+
+  composer = php: (phpPackages.override { inherit php; }).composer;
 in
-util.mkMatrix {
-  key = name: builtins.head (builtins.split "\\.[0-9]+$" name);
-  versions = versions;
-  mkDerivation = mkPhpDerivation;
+rec {
+  php74 = generic { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; };
+  composer74 = composer php74;
+
+  php73 = generic { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; };
+  composer73 = composer php73;
+
+  php72 = generic { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; };
+  composer72 = composer php72;
+
+  php71 = generic { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; };
+  composer71 = composer php71;
+
+  php70 = generic { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; };
+  composer70 = composer php70;
+
+  php56 = generic { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; };
+  composer56 = composer php56;
 }
