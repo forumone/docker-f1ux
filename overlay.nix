@@ -17,8 +17,9 @@ in
   util = import ./util.nix { inherit (self) lib; };
 
   # Replace Ruby and Bundler with the custom derivation
-  ruby = self.callPackage ./ruby.nix {};
-  bundler = self.callPackage ./bundler.nix {};
+  ruby23 = self.callPackage ./ruby.nix {};
+  bundler2 = self.callPackage ./bundler.nix {};
+
 
   # Add the temporary Composer path derivation (see comments in that file)
   composerTemp = self.callPackage ./composerTemp.nix {};

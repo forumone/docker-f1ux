@@ -14,7 +14,7 @@
   # Languages & tools
 , node, grunt
 , php, composer
-, ruby, bundler
+, ruby23, bundler2
 
   # Library stuff
 , util
@@ -35,7 +35,7 @@ let
 in
 dockerTools.buildLayeredImage {
   name = "forumone/f1ux";
-  tag = util.combineKeys [node php ruby];
+  tag = util.combineKeys [node php ruby23];
 
   # Force nix to set the creation date to now for better discoverability by install
   # date (the default is a fixed date for image reproducibility reasons)
@@ -74,8 +74,8 @@ dockerTools.buildLayeredImage {
     composer
 
     # Ruby
-    ruby
-    bundler
+    ruby23
+    bundler2
   ];
 
   config = {
