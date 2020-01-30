@@ -20,6 +20,10 @@ in
   ruby23 = self.callPackage ./ruby.nix {};
   bundler2 = self.callPackage ./bundler.nix {};
 
+  # Add prebuilt phantomjs
+  inherit (self.callPackage ./phantomjs-prebuilt.nix {})
+    phantomjs-prebuilt
+    phantomjs-prebuilt_19;
 
   # Add paths expected by various tools (see comments in the referenced files)
   composerTemp = self.callPackage ./composerTemp.nix {};
