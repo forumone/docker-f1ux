@@ -21,10 +21,10 @@ in
   bundler2 = self.callPackage ./bundler.nix {};
 
 
-  # Add the temporary Composer path derivation (see comments in that file)
+  # Add paths expected by various tools (see comments in the referenced files)
   composerTemp = self.callPackage ./composerTemp.nix {};
-  # Add the symbolic link to ca-bundle.crt (see comments in that file)
   certPath = self.callPackage ./certPath.nix {};
+  usrBinEnv = self.callPackage ./usrBinEnv.nix {};
 
   # Add node versions and expose shorthand for node & grunt
   inherit nodeVersions;

@@ -9,7 +9,7 @@
 , gnumake, gnused, gnugrep, gawk, diffutils, binutils, binutils-unwrapped
 
   # Paths
-, composerTemp
+, composerTemp, usrBinEnv
 
   # Languages & tools
 , node, grunt
@@ -27,7 +27,6 @@ let
   symlinks = runCommand "symlinks" {} ''
     mkdir -p $out/usr/bin
     ln -s ${file}/bin/file $out/usr/bin/file
-    ln -s ${coreutils}/bin/env $out/usr/bin/env
 
     mkdir -p $out/bin
     ln -s ${binutils-unwrapped}/bin/ar $out/bin/ar
@@ -64,6 +63,7 @@ dockerTools.buildLayeredImage {
     # Paths needed in the image
     composerTemp
     symlinks
+    usrBinEnv
 
     # Node.js
     node
