@@ -3,10 +3,13 @@
   dockerTools
 
   # Utilities
-, git, busybox
+, git, busybox, fontconfig, phantomjs-prebuilt_19
+
+  # Include explicitly
+, glibc
 
   # Paths
-, composerTemp, certPath
+, composerTemp, certPath, usrBinEnv
 
   # Languages & tools
 , node, grunt
@@ -22,10 +25,16 @@ dockerTools.buildLayeredImage {
   created = "now";
 
   contents = [
+    glibc
+
     git
     busybox
+    fontconfig.out
+    phantomjs-prebuilt_19
+
     certPath
     composerTemp
+    usrBinEnv
 
     node
     grunt
