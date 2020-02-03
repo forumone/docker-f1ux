@@ -18,7 +18,10 @@
 }:
 let
   generic =
-    # release is the GitHub release, in case it differs from the related PhantomJS version
+    # Parameters:
+    # - version: The PhantonJS version
+    # - sha256: The checksum of the release tarball (linux-x86_64)
+    # - release: The GitHub release in case it differs from the related PhantomJS version
     { version, sha256, release ? version }:
     stdenv.mkDerivation {
       pname = "phantomjs-prebuilt";
