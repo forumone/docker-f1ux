@@ -1,47 +1,30 @@
-# How to build PHP from this file:
-#   nix-build php.nix -A \"7.1\"
-#
-# The escapes are needed since "7.1" doesn't follow Nix's normal rules for attribute names
+{
+  # Nix library elements
+  stdenv, lib, fetchurl
+
+  # Build tools
+, pkgconfig, autoconf
+
+  # Build dependencies
+, libxml2, libzip, oniguruma, openssl, openssl_1_0_2, zlib
+
+  # Composer and friends
+, phpPackages
+}:
 let
-  util = import ./util.nix;
-
-  versions = [
-    # The sha256 digest here is for the .tar.bz2 files of the PHP source distribution
-    { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; }
-    { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; }
-    { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; }
-    { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; }
-    { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; }
-    { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; }
-  ];
-
-  mkPhpDerivation =
-    { name, version, sha256 }:
+  generic =
+    { version, sha256 }:
     let
-      # Import nixpkgs and the standard build environment
-      pkgs = import <nixpkgs> {};
-
-      # This derivation uses static links to reduce the build output's size
-      inherit (pkgs.pkgsStatic) stdenv lib fetchurl;
-      inherit (pkgs.pkgsStatic) pkgconfig libxml2 zlib;
-
-      # Static oniguruma - this override is here because we are waiting on these PRs:
-      # * https://github.com/NixOS/nixpkgs/pull/75950 (static oniguruma)
-      # * https://github.com/NixOS/nixpkgs/pull/76659 (generalizes the above for CMake-based libraries)
-      oniguruma = pkgs.pkgsStatic.oniguruma.overrideAttrs (_: {
-        cmakeFlags = ["-DBUILD_SHARED_LIBS=OFF"];
-      });
-
-      # This is not yet in a PR, but we should likely wait until nixpkgs#76659 is merged
-      # in order to avoid
-      libzip = pkgs.pkgsStatic.libzip.overrideAttrs ({ cmakeFlags ? [], ... }: {
-        cmakeFlags = cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_REGRESS=OFF" ];
-      });
-
       libxmlFlag =
         if lib.versionAtLeast version "7.1"
         then "--enable-libxml=static"
         else "--with-libxml-dir=${libxml2.dev}";
+
+      # Use older OpenSSL for 5.6 - it doesn't appear to be compatible with 1.1.
+      sslpkg =
+        if lib.versionAtLeast version "7.0"
+        then openssl
+        else openssl_1_0_2;
     in
     stdenv.mkDerivation {
       pname = "php";
@@ -53,24 +36,23 @@ let
       };
 
       enableParallelBuilding = true;
-      static = true;
 
-      buildInputs = with (pkgs.pkgsStatic); [
+      buildInputs = [
         libxml2
         libzip
         oniguruma
-        openssl
+        sslpkg
         zlib
       ];
 
-      nativeBuildInputs = with (pkgs.pkgsStatic); [
+      nativeBuildInputs = [
         pkgconfig
         autoconf
       ];
 
       # 1. Omit the "@CONFIGURE_*@" flags (these are output by php -i) in order to further
       #    reduce this derivation's output size
-      # 2. Manually add libxml2 to PKG_CONFIG_PATH
+      # 2. Manually add libxml2's utilities to $PATH
       # 3. Regenerate ./configure
       preConfigure = ''
         for offender in main/build-defs.h.in scripts/php-config.in; do
@@ -115,7 +97,11 @@ let
         "--with-zlib-dir=${zlib.dev}"
       ];
 
-      # Move php-config and php-ize to the $dev output
+      passthru = {
+        dockerKey = "php-${lib.versions.majorMinor version}";
+      };
+
+      # Move php-config and php-ize to the $dev output (see below)
       postInstall = ''
         mkdir -p $dev/bin
         for tool in phpize php-config; do
@@ -127,9 +113,25 @@ let
       # any extensions in a Gesso image)
       outputs = [ "out" "dev" ];
     };
+
+  composer = php: (phpPackages.override { inherit php; }).composer;
 in
-util.mkMatrix {
-  key = name: builtins.head (builtins.split "\\.[0-9]+$" name);
-  versions = versions;
-  mkDerivation = mkPhpDerivation;
+rec {
+  php74 = generic { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; };
+  composer74 = composer php74;
+
+  php73 = generic { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; };
+  composer73 = composer php73;
+
+  php72 = generic { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; };
+  composer72 = composer php72;
+
+  php71 = generic { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; };
+  composer71 = composer php71;
+
+  php70 = generic { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; };
+  composer70 = composer php70;
+
+  php56 = generic { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; };
+  composer56 = composer php56;
 }

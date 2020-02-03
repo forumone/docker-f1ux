@@ -1,28 +1,89 @@
-# Images for Gesso 1.x, F1UX, and F1Omega (Experimental)
+# Images for Gesso 2.x, Gesso 1.x, F1UX, and F1Omega (Experimental)
 
 ## About
 
-This repo builds multiple images for old (pre-`node-sass`) ForumOne themes. Images are broken down by the available Node, PHP, and Ruby versions installed - this is done in case there are version compatibility issues with software.
+This repo builds multiple images for older Forum One themes. We provide builds for Gesso 2.x and the pre-`node-sass` themes (Gesso 1.x, f1ux, f1omega, and so on). Images are broken down by the available Node, PHP, and Ruby versions installed - this is done in case there are version compatibility issues with software.
 
 ## Versions Supported
 
-| Node Version | PHP Version | Ruby Version | Image Tag                 |
-| ------------ | ----------- | ------------ | ------------------------- |
-| v4           | 7.1         | 2.3          | node-v4-php-7.1-ruby-2.3  |
-| v4           | 7.2         | 2.3          | node-v4-php-7.2-ruby-2.3  |
-| v4           | 7.3         | 2.3          | node-v4-php-7.3-ruby-2.3  |
-| v6           | 7.1         | 2.3          | node-v6-php-7.1-ruby-2.3  |
-| v6           | 7.2         | 2.3          | node-v6-php-7.2-ruby-2.3  |
-| v6           | 7.3         | 2.3          | node-v6-php-7.3-ruby-2.3  |
-| v8           | 7.1         | 2.3          | node-v8-php-7.1-ruby-2.3  |
-| v8           | 7.2         | 2.3          | node-v8-php-7.2-ruby-2.3  |
-| v8           | 7.3         | 2.3          | node-v8-php-7.3-ruby-2.3  |
-| v10          | 7.1         | 2.3          | node-v10-php-7.1-ruby-2.3 |
-| v10          | 7.2         | 2.3          | node-v10-php-7.2-ruby-2.3 |
-| v10          | 7.3         | 2.3          | node-v10-php-7.3-ruby-2.3 |
-| v12          | 7.1         | 2.3          | node-v12-php-7.1-ruby-2.3 |
-| v12          | 7.2         | 2.3          | node-v12-php-7.2-ruby-2.3 |
-| v12          | 7.3         | 2.3          | node-v12-php-7.3-ruby-2.3 |
+<details>
+
+<summary>Compass-based themes</summary>
+
+| Node Version | PHP Version | Ruby Version | Image                                   |
+| ------------ | ----------- | ------------ | --------------------------------------- |
+| v4           | 5.6         | 2.3          | forumone/f1ux:node-v4-php-5.6-ruby-2.3  |
+| v4           | 7.0         | 2.3          | forumone/f1ux:node-v4-php-7.0-ruby-2.3  |
+| v4           | 7.1         | 2.3          | forumone/f1ux:node-v4-php-7.1-ruby-2.3  |
+| v4           | 7.2         | 2.3          | forumone/f1ux:node-v4-php-7.2-ruby-2.3  |
+| v4           | 7.3         | 2.3          | forumone/f1ux:node-v4-php-7.3-ruby-2.3  |
+| v4           | 7.4         | 2.3          | forumone/f1ux:node-v4-php-7.4-ruby-2.3  |
+| v6           | 5.6         | 2.3          | forumone/f1ux:node-v6-php-5.6-ruby-2.3  |
+| v6           | 7.0         | 2.3          | forumone/f1ux:node-v6-php-7.0-ruby-2.3  |
+| v6           | 7.1         | 2.3          | forumone/f1ux:node-v6-php-7.1-ruby-2.3  |
+| v6           | 7.2         | 2.3          | forumone/f1ux:node-v6-php-7.2-ruby-2.3  |
+| v6           | 7.3         | 2.3          | forumone/f1ux:node-v6-php-7.3-ruby-2.3  |
+| v6           | 7.4         | 2.3          | forumone/f1ux:node-v6-php-7.4-ruby-2.3  |
+| v8           | 5.6         | 2.3          | forumone/f1ux:node-v8-php-5.6-ruby-2.3  |
+| v8           | 7.0         | 2.3          | forumone/f1ux:node-v8-php-7.0-ruby-2.3  |
+| v8           | 7.1         | 2.3          | forumone/f1ux:node-v8-php-7.1-ruby-2.3  |
+| v8           | 7.2         | 2.3          | forumone/f1ux:node-v8-php-7.2-ruby-2.3  |
+| v8           | 7.3         | 2.3          | forumone/f1ux:node-v8-php-7.3-ruby-2.3  |
+| v8           | 7.4         | 2.3          | forumone/f1ux:node-v8-php-7.4-ruby-2.3  |
+| v10          | 5.6         | 2.3          | forumone/f1ux:node-v10-php-5.6-ruby-2.3 |
+| v10          | 7.0         | 2.3          | forumone/f1ux:node-v10-php-7.0-ruby-2.3 |
+| v10          | 7.1         | 2.3          | forumone/f1ux:node-v10-php-7.1-ruby-2.3 |
+| v10          | 7.2         | 2.3          | forumone/f1ux:node-v10-php-7.2-ruby-2.3 |
+| v10          | 7.3         | 2.3          | forumone/f1ux:node-v10-php-7.3-ruby-2.3 |
+| v10          | 7.4         | 2.3          | forumone/f1ux:node-v10-php-7.4-ruby-2.3 |
+| v12          | 5.6         | 2.3          | forumone/f1ux:node-v12-php-5.6-ruby-2.3 |
+| v12          | 7.0         | 2.3          | forumone/f1ux:node-v12-php-7.0-ruby-2.3 |
+| v12          | 7.1         | 2.3          | forumone/f1ux:node-v12-php-7.1-ruby-2.3 |
+| v12          | 7.2         | 2.3          | forumone/f1ux:node-v12-php-7.2-ruby-2.3 |
+| v12          | 7.3         | 2.3          | forumone/f1ux:node-v12-php-7.3-ruby-2.3 |
+| v12          | 7.4         | 2.3          | forumone/f1ux:node-v12-php-7.4-ruby-2.3 |
+
+</details>
+
+<details>
+
+<summary>Gesso 2.x-based themes</summary>
+
+
+| Node Version | PHP Version | Image                             |
+| ------------ | ----------- | --------------------------------- |
+| v4           | 5.6         | forumone/gesso:2-node-v4-php-5.6  |
+| v4           | 7.0         | forumone/gesso:2-node-v4-php-7.0  |
+| v4           | 7.1         | forumone/gesso:2-node-v4-php-7.1  |
+| v4           | 7.2         | forumone/gesso:2-node-v4-php-7.2  |
+| v4           | 7.3         | forumone/gesso:2-node-v4-php-7.3  |
+| v4           | 7.4         | forumone/gesso:2-node-v4-php-7.4  |
+| v6           | 5.6         | forumone/gesso:2-node-v6-php-5.6  |
+| v6           | 7.0         | forumone/gesso:2-node-v6-php-7.0  |
+| v6           | 7.1         | forumone/gesso:2-node-v6-php-7.1  |
+| v6           | 7.2         | forumone/gesso:2-node-v6-php-7.2  |
+| v6           | 7.3         | forumone/gesso:2-node-v6-php-7.3  |
+| v6           | 7.4         | forumone/gesso:2-node-v6-php-7.4  |
+| v8           | 5.6         | forumone/gesso:2-node-v8-php-5.6  |
+| v8           | 7.0         | forumone/gesso:2-node-v8-php-7.0  |
+| v8           | 7.1         | forumone/gesso:2-node-v8-php-7.1  |
+| v8           | 7.2         | forumone/gesso:2-node-v8-php-7.2  |
+| v8           | 7.3         | forumone/gesso:2-node-v8-php-7.3  |
+| v8           | 7.4         | forumone/gesso:2-node-v8-php-7.4  |
+| v10          | 5.6         | forumone/gesso:2-node-v10-php-5.6 |
+| v10          | 7.0         | forumone/gesso:2-node-v10-php-7.0 |
+| v10          | 7.1         | forumone/gesso:2-node-v10-php-7.1 |
+| v10          | 7.2         | forumone/gesso:2-node-v10-php-7.2 |
+| v10          | 7.3         | forumone/gesso:2-node-v10-php-7.3 |
+| v10          | 7.4         | forumone/gesso:2-node-v10-php-7.4 |
+| v12          | 5.6         | forumone/gesso:2-node-v12-php-5.6 |
+| v12          | 7.0         | forumone/gesso:2-node-v12-php-7.0 |
+| v12          | 7.1         | forumone/gesso:2-node-v12-php-7.1 |
+| v12          | 7.2         | forumone/gesso:2-node-v12-php-7.2 |
+| v12          | 7.3         | forumone/gesso:2-node-v12-php-7.3 |
+| v12          | 7.4         | forumone/gesso:2-node-v12-php-7.4 |
+
+</details>
 
 ## Requirements
 
@@ -31,54 +92,60 @@ This repo builds multiple images for old (pre-`node-sass`) ForumOne themes. Imag
 
 ## Build Instructions
 
-### Building All Images
+### Building Images
 
-These two commands will build and load all available images into the local Docker daemon. Note that it will take some time to compile the dependencies once this is completed
+Note that it will take some time to build all images in this project; there are custom node.js and PHP derivations that must be compiled first.
 
 ```sh
 nix-build
-for file in result/*.tar.gz; do
-  docker load <$file
-done
+```
+
+The output of this build is two shell scripts (`./result` and `./result-2`) that must be run to load the images into your Docker daemon.
+
+If you only want a single set of images, use the `-A` flag:
+
+```sh
+nix-build -A f1ux && ./result
 ```
 
 ### Building One Image
 
-This will build and load a single image.
+Images available in `pkgs.nix`. To build `forumone/f1ux:node-v10-php-7.2-ruby-2.3`, use this expression:
 
 ```sh
-# Change this to the tag you want to build
-tag="node-v10-php-7.1-ruby-2.3"
-
-nix-build images.nix -A \"$tag\"
+nix-build pkgs.nix -A f1ux.node10-php72
 docker load <result
 ```
 
+Images for Gesso 2.x can be found by building against the `gesso2` attribute of `pkgs.nix`.
+
 ## Organization
 
-This repository is organized into files that represent one or more _derivations_ (think "package" that you'd install with apt-get or brew). The files are listed here in roughly dependency order:
+This repository is organized as a Nixpkgs overlay, which simply means that it augments the system's nixpkgs with custom derivations. The files are listed here in roughly dependency order:
 
-Docker images:
+- The entrypoint is `default.nix`, which is what `nix-build` looks for if not given a file argument.
 
-- `default.nix` - this is the file that `nix-build` picks up by default. When built, the output directory will be one tarball for each row in the versions table.
-- `images.nix` - this file is an attribute set (think JS object or PHP array) where each key is a Docker image tag, and the value is the derivation for that image.
+- `pkgs.nix` is an export of nixpkgs with this repo's overlay pre-applied.
 
-Node:
+- `overlay.nix` is the most useful starting point for understanding the repo; it's the file that defines new packages (or replaces existing ones) in use by the other files.
 
-- `node.nix` - this file is an attribute set keyed by Node major version (e.g., `v4` or `v12`) where the values are Node derivations.
-- `grunt.nix` - this file builds Grunt against a Node from `node.nix`.
+Interpreters:
 
-PHP:
+- `node.nix` defines all of the supported Node.js versions. A Node.js version like 12 is available as `nodeVersions.node12`, and there is a corresponding `nodeVersions.grunt12` for the Grunt CLI.
 
-- `php.nix` - this file is an attribute set keyed by PHP minor version (e.g., `7.1` or `7.3`) where the values are PHP derivations.
-- `composer.nis` - this file builds Composer against a PHP from `php.nix`.
+- `php.nix` defines all of the supported PHP versions. Each PHP version is keyed by its major and minor version (thus, 7.3 is available as `phpVersions.php73`). Composer is also available, keyed by PHP version (`phpVersions.composer73` is Composer built for the custom PHP 7.3).
 
-Ruby:
+- `ruby.nix` builds a stripped-down Ruby 2.3 for the old Compass-based themes.
 
-- `ruby.nix` - this file is an attribute set keyed by Ruby mnior version (e.g., `2.3`) where the values are Ruby derivations.
-- `bundler.nix` - this file builds Bundler against a Ruby from `ruby.nix`.
+- `bundler.nix` builds Bundler 2 against the custom Ruby derivation.
 
-If you are looking to understand the build flow, then start with `images.nix` and go to the Node, PHP, and/or Ruby derivations from there.
+Paths:
+
+The files `certPath.nix` and `composerTemp.nix` contain Nix derivations to customize the path layout inside of the Docker image in which they are included.
+
+Utilities:
+
+`util.nix` includes functions intended to supplement `<nixpkgs/lib>`.
 
 ## Post-Build Cleanup
 

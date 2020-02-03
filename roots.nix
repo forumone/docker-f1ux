@@ -9,37 +9,33 @@
 #
 # By passing "-o roots" to nix-build, we create a new symbolic link independent of the
 # conventional "result" symbolic link, which allows us to keep both the images and the
-# interpreters as roots during garbage collection
+# interpreters as roots during garbage collection.
 let
-  pkgs = import <nixpkgs> {};
-  inherit (pkgs) runCommand;
+  pkgs = import ./pkgs.nix;
+  inherit (pkgs) writeText lib;
 
-  node = import ./node.nix;
-  php = import ./php.nix;
-  ruby = import ./ruby.nix;
+  # Things to build that we know aren't part of the upstream nixpkgs cache
+  inherit (pkgs)
+    git
+    nodeVersions
+    phpVersions
+    ruby23 bundler2;
+
+  # Gets all derivations from the attrset
+  derivationsOf = attrs:
+    builtins.filter lib.isDerivation (builtins.attrValues attrs);
 
   # The result of stringifying a derivation is the path in the Nix store
   derivationPath = drv: "${drv}";
 
-  # Creates a list of string paths to the values in an attribute set
-  derivationPaths = attrs: builtins.map derivationPath (builtins.attrValues attrs);
+  addRoots = builtins.concatMap (builtins.map derivationPath);
 in
-runCommand "temp-roots" {
-  # These values are injected by Nix into the runCommand environment
-  nodePaths = derivationPaths node;
-  phpPaths = derivationPaths php;
-  rubyPaths = derivationPaths ruby;
-} ''
-  for node in $nodePaths; do
-    echo $node >> $out
-  done
-
-  for php in $phpPaths; do
-    echo $php >> $out
-  done
-
-  for ruby in $rubyPaths; do
-    echo $ruby >> $out
-  done
-''
-
+writeText
+  "roots"
+  (builtins.concatStringsSep
+    "\n"
+    (addRoots [
+      [git ruby23 bundler2]
+      (derivationsOf phpVersions)
+      (derivationsOf nodeVersions)
+    ]))

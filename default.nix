@@ -1,30 +1,31 @@
-# How to build this file:
+# Build all images (f1ux and gesso 2.x):
 #   nix-build
 #
-# This is the default file used by nix-build. The result of building this file is a
-# directory, named result/ by convention, that contains symbolic links to each of the
-# Docker image tarballs produced by the derivations in images.nix.
+# Build only f1ux images:
+#   nix-build -A f1ux
 #
-# The directory's contents can be inspected or loaded into Docker via "docker load <$tag.tag.gz".
+# Build only gesso 2.x images:
+#   nix-build -A gesso2
 let
-  pkgs = import <nixpkgs> {};
-  inherit (pkgs) runCommand lib;
+  pkgs = import ./pkgs.nix;
+  inherit (pkgs) lib f1ux gesso2;
 
-  images = import ./images.nix;
+  # Retrieves the Docker images from an attrset (i.e., pkgs.f1ux or pkgs.gesso2)
+  getImages = imageSet:
+    builtins.filter
+      lib.isDerivation
+      (builtins.attrValues imageSet);
 
-  # Creates a line of shell script that links the image pointed to by tag into $out
-  linkImage = tag: ''
-    ln -s ${images.${tag}} $out/${tag}.tar.gz
-  '';
+  # Single line of shell script to load a Docker image
+  loadImage = drv: "docker load <${drv}";
 
-  # Creates the bash code necessary to link all image tags into $out - this has the effect
-  # of asking Nix to build all image variations.
-  linkAllImages = builtins.concatStringsSep
-    "\n"
-    (builtins.map linkImage (builtins.attrNames images));
+  # Creates a shell script to load the image sets passed in as imageSets
+  loadImages = imageSet:
+      pkgs.writeShellScript
+        "loadImages"
+        (lib.concatMapStringsSep "\n" loadImage (getImages imageSet));
 in
-runCommand "images" {} ''
-  mkdir -p $out
-
-  ${linkAllImages}
-''
+{
+  f1ux = loadImages f1ux;
+  gesso2 = loadImages gesso2;
+}
