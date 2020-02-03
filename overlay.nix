@@ -6,7 +6,8 @@ let
 in
 {
   # Replace git with a smaller version - this is solely used by npm/composer to fetch
-  # git-based dependencies, so most of the
+  # git-based dependencies, so most of the features that aren't plumbing-related (the
+  # manual and stuff like interactive patching) can be safely omitted.
   git = super.git.override {
     perlSupport = false;
     pythonSupport = false;
