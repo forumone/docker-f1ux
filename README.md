@@ -2,7 +2,7 @@
 
 ## About
 
-This repo builds multiple images for older ForumOne themes. We provide builds for Gesso 2.x and the pre-`node-sass` themes (Gesso 1.x, f1ux, f1omega, and so on). Images are broken down by the available Node, PHP, and Ruby versions installed - this is done in case there are version compatibility issues with software.
+This repo builds multiple images for older Forum One themes. We provide builds for Gesso 2.x and the pre-`node-sass` themes (Gesso 1.x, f1ux, f1omega, and so on). Images are broken down by the available Node, PHP, and Ruby versions installed - this is done in case there are version compatibility issues with software.
 
 ## Versions Supported
 
