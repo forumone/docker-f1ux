@@ -19,7 +19,7 @@ let
     git
     nodeVersions
     phpVersions
-    ruby bundler;
+    ruby23 bundler2;
 
   # Gets all derivations from the attrset
   derivationsOf = attrs:
@@ -35,7 +35,7 @@ writeText
   (builtins.concatStringsSep
     "\n"
     (addRoots [
-      [git ruby bundler]
+      [git ruby23 bundler2]
       (derivationsOf phpVersions)
       (derivationsOf nodeVersions)
     ]))
