@@ -8,6 +8,9 @@
 , bashInteractive, coreutils, file
 , gnumake, gnused, gnugrep, gawk, diffutils, binutils, binutils-unwrapped
 
+  # PhantomJS
+, fontconfig, phantomjs-prebuilt_19
+
   # Paths
 , composerTemp, usrBinEnv
 
@@ -59,6 +62,10 @@ dockerTools.buildLayeredImage {
     gawk
     diffutils
     binutils
+
+    # PhantomJS
+    fontconfig.out
+    phantomjs-prebuilt_19
 
     # Paths needed in the image
     composerTemp
