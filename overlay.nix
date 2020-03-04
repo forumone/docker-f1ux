@@ -24,7 +24,8 @@ in
   # Add prebuilt phantomjs
   inherit (self.callPackage ./phantomjs-prebuilt.nix {})
     phantomjs-prebuilt
-    phantomjs-prebuilt_19;
+    phantomjs-prebuilt_19
+    phantomjs-prebuilt_197;
 
   # Add paths expected by various tools (see comments in the referenced files)
   composerTemp = self.callPackage ./composerTemp.nix {};

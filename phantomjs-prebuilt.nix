@@ -17,18 +17,27 @@
 , lib
 }:
 let
+  # The Medium installer only goes as far back as 1.9.8, and we need 1.9.7 to support some
+  # legacy themes, so we fall back to BitBucket when we need to.
+  sources = {
+    github = { release, version }: "https://github.com/Medium/phantomjs/releases/download/v${release}/phantomjs-${version}-linux-x86_64.tar.bz2";
+
+    # Use '...' because we don't care about the release parameter
+    bitbucket = { version, ... }: "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${version}-linux-x86_64.tar.bz2";
+  };
+
   generic =
     # Parameters:
     # - version: The PhantonJS version
     # - sha256: The checksum of the release tarball (linux-x86_64)
     # - release: The GitHub release in case it differs from the related PhantomJS version
-    { version, sha256, release ? version }:
+    { version, sha256, release ? version, source ? "github" }:
     stdenv.mkDerivation {
       pname = "phantomjs-prebuilt";
       inherit version;
 
       src = fetchurl {
-        url = "https://github.com/Medium/phantomjs/releases/download/v${release}/phantomjs-${version}-linux-x86_64.tar.bz2";
+        url = sources.${source} { inherit release version; };
         inherit sha256;
       };
 
@@ -66,5 +75,11 @@ in
     version = "1.9.8";
     release = "1.9.19";
     sha256 = "0fhnqxxsxhy125fmif1lwgnlhfx908spy7fx9mng4w72320n5nd1";
+  };
+
+  phantomjs-prebuilt_197 = generic {
+    version = "1.9.7";
+    source = "bitbucket";
+    sha256 = "06mhvj8rx298j0mrijw48zfm28hqgy81vdr1vv0jp4ncxbvijfs7";
   };
 }
