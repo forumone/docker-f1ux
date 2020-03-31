@@ -14,6 +14,7 @@
   # Languages & tools
 , node, grunt
 , php, composer
+, phpVersions
 
   # Library stuff
 , util
@@ -39,7 +40,7 @@ dockerTools.buildLayeredImage {
     node
     grunt
 
-    php
+    (phpVersions.removeMemoryLimit php)
     composer
   ];
 
@@ -48,8 +49,8 @@ dockerTools.buildLayeredImage {
     WorkingDir = "/app";
     Env = [
       "PATH=${util.dockerPath}"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-bundle.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt"
+      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
     ];
   };
 }

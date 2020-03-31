@@ -17,6 +17,7 @@
   # Languages & tools
 , node, grunt
 , php, composer
+, phpVersions
 , ruby23, bundler2
 
   # Library stuff
@@ -77,7 +78,7 @@ dockerTools.buildLayeredImage {
     grunt
 
     # PHP
-    php
+    (phpVersions.removeMemoryLimit php)
     composer
 
     # Ruby
@@ -92,8 +93,8 @@ dockerTools.buildLayeredImage {
 
     Env = [
       "PATH=${util.dockerPath}:${ruby23}/bin"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-bundle.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt"
+      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
     ];
   };
 }
