@@ -2,6 +2,9 @@
   # Nix library elements
   stdenv, lib, fetchurl
 
+  # Builders
+, writeTextFile, runCommand, makeWrapper
+
   # Build tools
 , pkgconfig, autoconf
 
@@ -115,6 +118,25 @@ let
     };
 
   composer = php: (phpPackages.override { inherit php; }).composer;
+
+  # Creates a config file to remove the PHP memory limit
+  memoryLimitConfig = writeTextFile {
+    name = "cli.ini";
+    text = ''
+      memory_limit = -1
+    '';
+  };
+
+  # Wraps a PHP derivation to add the "-c" flag (path to a config file) that references
+  # the above memoryLimitConfig derivation.
+  removeMemoryLimit = php: runCommand "php-cli-${php.version}"
+    { buildInputs = [ makeWrapper ]; }
+    ''
+      mkdir -p $out
+      makeWrapper "${php}/bin/php" "$out/bin/php" \
+        --argv0 php \
+        --add-flags "-c ${memoryLimitConfig}"
+    '';
 in
 rec {
   php74 = generic { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; };
@@ -134,4 +156,6 @@ rec {
 
   php56 = generic { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; };
   composer56 = composer php56;
+
+  inherit removeMemoryLimit;
 }

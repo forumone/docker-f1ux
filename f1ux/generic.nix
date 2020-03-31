@@ -17,6 +17,7 @@
   # Languages & tools
 , node, grunt
 , php, composer
+, phpVersions
 , ruby23, bundler2
 
   # Library stuff
@@ -77,7 +78,7 @@ dockerTools.buildLayeredImage {
     grunt
 
     # PHP
-    php
+    (phpVersions.removeMemoryLimit php)
     composer
 
     # Ruby

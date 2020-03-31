@@ -14,6 +14,7 @@
   # Languages & tools
 , node, grunt
 , php, composer
+, phpVersions
 
   # Library stuff
 , util
@@ -39,7 +40,7 @@ dockerTools.buildLayeredImage {
     node
     grunt
 
-    php
+    (phpVersions.removeMemoryLimit php)
     composer
   ];
 
