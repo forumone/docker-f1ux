@@ -48,8 +48,8 @@ dockerTools.buildLayeredImage {
     WorkingDir = "/app";
     Env = [
       "PATH=${util.dockerPath}"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-bundle.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt"
+      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
     ];
   };
 }

@@ -92,8 +92,8 @@ dockerTools.buildLayeredImage {
 
     Env = [
       "PATH=${util.dockerPath}:${ruby23}/bin"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-bundle.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-bundle.crt"
+      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
     ];
   };
 }
