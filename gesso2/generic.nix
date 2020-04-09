@@ -3,7 +3,11 @@
   dockerTools
 
   # Utilities
-, git, busybox, fontconfig, phantomjs-prebuilt_19
+, git, busybox
+
+  # Support for PhantomJS & friends
+, fontconfig
+, resolve-all-libraries
 
   # Include explicitly
 , glibc
@@ -31,7 +35,7 @@ dockerTools.buildLayeredImage {
     git
     busybox
     fontconfig.out
-    phantomjs-prebuilt_19
+    resolve-all-libraries
 
     certPath
     composerTemp
