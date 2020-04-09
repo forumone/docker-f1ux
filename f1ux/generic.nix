@@ -8,8 +8,8 @@
 , bashInteractive, coreutils, file
 , gnumake, gnused, gnugrep, gawk, diffutils, binutils, binutils-unwrapped
 
-  # PhantomJS
-, fontconfig, phantomjs-prebuilt_197
+  # Support for PhantomJS and friends
+, bzip2, fontconfig, gnutar, resolve-all-libraries
 
   # Paths
 , composerTemp, usrBinEnv
@@ -64,9 +64,11 @@ dockerTools.buildLayeredImage {
     diffutils
     binutils
 
-    # PhantomJS
+    # PhantomJS and friends
+    bzip2.bin
     fontconfig.out
-    phantomjs-prebuilt_197
+    gnutar
+    resolve-all-libraries
 
     # Paths needed in the image
     composerTemp

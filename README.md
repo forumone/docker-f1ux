@@ -85,6 +85,24 @@ This repo builds multiple images for older Forum One themes. We provide builds f
 
 </details>
 
+## Using `resolve-all-libraries`
+
+Previous iterations of these images used to include versions of PhantomJS to support projects. However, this became very unwieldly as some `package.json`s would resolve to multiple versions at the same time. Instead, we now ship a `resolve-all-libraries` script to automatically resolve the library references that PhantomJS needs.
+
+For example, you can use this snippet to resolve library references in your `node_modules` after an `npm install` in a Dockerfile:
+
+```dockerfile
+RUN set -ex \
+  && npm install \
+  && resolve-all-libraries node_modules
+```
+
+The `resolve-all-libraries` command accepts a few flags to change its behavior:
+
+* Passing `-v` increases the verbosity of the output. Passing `-vv` increases it to debug levels.
+* Passing `-f` forces the script to continue even if errors occur. This is useful to ignore resolution errors that don't affect theme builds.
+* Passing `-h` outputs the help and exits.
+
 ## Requirements
 
 - Docker

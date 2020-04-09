@@ -21,11 +21,8 @@ in
   ruby23 = self.callPackage ./ruby.nix {};
   bundler2 = self.callPackage ./bundler.nix {};
 
-  # Add prebuilt phantomjs
-  inherit (self.callPackage ./phantomjs-prebuilt.nix {})
-    phantomjs-prebuilt
-    phantomjs-prebuilt_19
-    phantomjs-prebuilt_197;
+  # Add the resolve-all-libraries command
+  resolve-all-libraries = self.callPackage ./resolve-all-libraries.nix {};
 
   # Add paths expected by various tools (see comments in the referenced files)
   composerTemp = self.callPackage ./composerTemp.nix {};
