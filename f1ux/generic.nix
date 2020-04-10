@@ -12,7 +12,7 @@
 , bzip2, fontconfig, gnutar, resolve-all-libraries
 
   # Paths
-, composerTemp, usrBinEnv
+, composerTemp, usrBinEnv, certPath, gitCertPath
 
   # Languages & tools
 , node, grunt
@@ -74,6 +74,7 @@ dockerTools.buildLayeredImage {
     composerTemp
     symlinks
     usrBinEnv
+    certPath
 
     # Node.js
     node
@@ -95,8 +96,8 @@ dockerTools.buildLayeredImage {
 
     Env = [
       "PATH=${util.dockerPath}:${ruby23}/bin"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAPATH=${gitCertPath}"
+      "GIT_SSL_CAINFO=${gitCertPath}"
     ];
   };
 }

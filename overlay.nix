@@ -14,6 +14,10 @@ in
     withManual = false;
   };
 
+  # Full path to cacert's bundle. We save this here to avoid issues with keeping the
+  # certificate paths in sync for the f1ux and gesso2 derivations.
+  gitCertPath = "${self.cacert}/etc/ssl/certs/ca-bundle.crt";
+
   # Add utilities
   util = import ./util.nix { inherit (self) lib; };
 

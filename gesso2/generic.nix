@@ -14,6 +14,7 @@
 
   # Paths
 , composerTemp, certPath, usrBinEnv
+, gitCertPath
 
   # Languages & tools
 , node, grunt
@@ -53,8 +54,8 @@ dockerTools.buildLayeredImage {
     WorkingDir = "/app";
     Env = [
       "PATH=${util.dockerPath}"
-      "GIT_SSL_CAPATH=/etc/ssl/certs/ca-certificates.crt"
-      "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt"
+      "GIT_SSL_CAPATH=${gitCertPath}"
+      "GIT_SSL_CAINFO=${gitCertPath}"
     ];
   };
 }
