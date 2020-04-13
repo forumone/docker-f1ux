@@ -1,4 +1,4 @@
-# Images for Gesso 2.x, Gesso 1.x, F1UX, and F1Omega (Experimental)
+# Images for Gesso 2.x, Gesso 1.x, F1UX, and F1Omega
 
 ## About
 
@@ -194,7 +194,7 @@ nix-store --optimize
 
 ## Support
 
-These images are currently experimental and should not be considered supported until they are stabilized.
+These images have been battle-tested against many projects and are considered largely stable for our purposes.
 
 ## License
 
