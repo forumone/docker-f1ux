@@ -1,7 +1,7 @@
 {
   stdenv, fetchurl, lib
 
-, openssl, zlib
+, openssl_1_0_2, zlib
 }:
 let
   generic =
@@ -22,7 +22,7 @@ let
       enableParallelBuilding = true;
 
       buildInputs = [
-        openssl
+        openssl_1_0_2
         zlib
       ];
 
