@@ -1,6 +1,6 @@
 {
   # Nix library elements
-  stdenv, lib, fetchurl
+  stdenv, lib, fetchurl, newScope
 
   # Builders
 , writeTextFile, runCommand, makeWrapper
@@ -98,6 +98,8 @@ let
         "--enable-ctype=static"
         "--enable-zip=static"
         "--with-zlib-dir=${zlib.dev}"
+
+        "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
       ];
 
       passthru = {
@@ -117,7 +119,24 @@ let
       outputs = [ "out" "dev" ];
     };
 
-  composer = php: (phpPackages.override { inherit php; }).composer;
+  # Create a new callPackage function specific to this PHP version. This is the idiom used
+  # by upstream nixpkgs in order to create PHP-specific derivations (see, e.g., [1]). By
+  # adopting this idiom ourselves, we can use the Composer derivation (the angle brackets
+  # are a path in nixpkgs root, arriving at [2]) directly, replacing nixpkgs' PHP with the
+  # one custom-built in this file.
+  #
+  # [1]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/php-packages.nix
+  # [2]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/php-packages/composer/default.nix
+  composer = php:
+    let
+      mkDerivation = { pname, ... }@args:
+        stdenv.mkDerivation (args // { pname = "php-${pname}"; });
+
+      callPackage = newScope {
+        inherit mkDerivation php;
+      };
+    in
+    callPackage <nixpkgs/pkgs/development/php-packages/composer> {};
 
   # Creates a config file to remove the PHP memory limit
   memoryLimitConfig = writeTextFile {
