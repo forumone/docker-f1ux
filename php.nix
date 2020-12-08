@@ -125,8 +125,8 @@ let
   # are a path in nixpkgs root, arriving at [2]) directly, replacing nixpkgs' PHP with the
   # one custom-built in this file.
   #
-  # [1]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/php-packages.nix [2]:
-  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/php-packages/composer/default.nix
+  # [1]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/php-packages.nix
+  # [2]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/php-packages/composer/default.nix
   composer = php:
     let
       mkDerivation = { pname, ... }@args:
