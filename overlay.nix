@@ -33,24 +33,9 @@ in
   certPath = self.callPackage ./certPath.nix {};
   usrBinEnv = self.callPackage ./usrBinEnv.nix {};
 
-  # Add node versions and expose shorthand for node & grunt
+  # Add PHP & node versions
   inherit nodeVersions;
-  inherit (nodeVersions)
-    node12 grunt12
-    node10 grunt10
-    node8 grunt8
-    node6 grunt6
-    node4 grunt4;
-
-  # Add PHP versions and expose shorthand for php & grunt
   inherit phpVersions;
-  inherit (phpVersions)
-    php74 composer74
-    php73 composer73
-    php72 composer72
-    php71 composer71
-    php70 composer70
-    php56 composer56;
 
   # Add the image sets
   f1ux = self.callPackage ./f1ux {};
