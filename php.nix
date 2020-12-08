@@ -98,6 +98,8 @@ let
         "--enable-ctype=static"
         "--enable-zip=static"
         "--with-zlib-dir=${zlib.dev}"
+
+        "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
       ];
 
       passthru = {
