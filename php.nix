@@ -15,6 +15,9 @@
 , phpPackages
 }:
 let
+  # Usage:
+  # * version: Full PHP version (e.g., 7.1.33)
+  # * sha256: SHA256 checksum of the .tar.bz2 source archive
   generic =
     { version, sha256 }:
     let
@@ -158,13 +161,14 @@ let
     '';
 in
 rec {
-  php74 = generic { version = "7.4.1"; sha256 = "6b1ca0f0b83aa2103f1e454739665e1b2802b90b3137fc79ccaa8c242ae48e4e"; };
+  # NB. sha256 is of the .tar.bz2 archive (see php.net/downloads and php.net/releases)
+  php74 = generic { version = "7.4.22"; sha256 = "5022bbca661bc1ab5dfaee72873bcd0f0980d9dd34f980a682029496f51caae1"; };
   composer74 = composer php74;
 
-  php73 = generic { version = "7.3.13"; sha256 = "5c7b89062814f3c3953d1518f63ed463fd452929e3a37110af4170c5d23267bc"; };
+  php73 = generic { version = "7.3.29"; sha256 = "a83a2878140bd86935f0046bbfe92672c8ab688fbe4ccf9704add6b9605ee4d0"; };
   composer73 = composer php73;
 
-  php72 = generic { version = "7.2.26"; sha256 = "f36d86eecf57ff919d6f67b064e1f41993f62e3991ea4796038d8d99c74e847b"; };
+  php72 = generic { version = "7.2.34"; sha256 = "0e5816d668a2bb14aca68cef8c430430bd86c3c5233f6c427d1a54aac127abcf"; };
   composer72 = composer php72;
 
   php71 = generic { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; };
