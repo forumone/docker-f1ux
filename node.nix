@@ -31,6 +31,9 @@ let
     in
     "v${lib.versions.major slice}";
 
+  # Usage:
+  # * version: Full Node.js version (e.g., v4.9.1)
+  # * sha256: SHA256 checksum of the .tar.xz source archive
   generic =
     { version, sha256 }:
     stdenv.mkDerivation {
@@ -93,10 +96,10 @@ let
 
 in rec {
   # The sha256 digest here is for the .tar.xz of the Node sources
-  node12 = generic { version = "v12.14.1"; sha256 = "877b4b842318b0e09bc754faf7343f2f097f0fc4f88ab9ae57cf9944e88e7adb"; };
+  node12 = generic { version = "v12.22.4"; sha256 = "44cd4eab131e5282fc923e9e720d983a0b44c12e4aa4f6c3598dc97ae1e4cd4c"; };
   grunt12 = grunt node12;
 
-  node10 = generic { version = "v10.18.1"; sha256 = "39af1837f439af7b4dc40ec18a64221c688c3982858168ae535bbe4911e8ea35"; };
+  node10 = generic { version = "v10.24.1"; sha256 = "d72fc2c244603b4668da94081dc4d6067d467fdfa026e06a274012f16600480c"; };
   grunt10 = grunt node10;
 
   node8 = generic { version = "v8.17.0"; sha256 = "5b0d96db482b273f0324c299ead86ecfbc5d033516e5fc37c92cfccb933ef6ff"; };
