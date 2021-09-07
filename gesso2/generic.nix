@@ -50,7 +50,7 @@ dockerTools.buildLayeredImage {
   ];
 
   config = {
-    Cmd = "${busybox}/bin/sh";
+    Cmd = [ "${busybox}/bin/sh" ];
     WorkingDir = "/app";
     Env = [
       "PATH=${util.dockerPath}"
