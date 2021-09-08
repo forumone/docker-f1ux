@@ -90,7 +90,7 @@ dockerTools.buildLayeredImage {
   ];
 
   config = {
-    Cmd = "${bashInteractive}/bin/bash";
+    Cmd = [ "${bashInteractive}/bin/bash" ];
 
     WorkingDir = "/app";
 
