@@ -18,30 +18,35 @@ This repo builds multiple images for older Forum One themes. We provide builds f
 | v4           | 7.2         | 2.3          | forumone/f1ux:node-v4-php-7.2-ruby-2.3  |
 | v4           | 7.3         | 2.3          | forumone/f1ux:node-v4-php-7.3-ruby-2.3  |
 | v4           | 7.4         | 2.3          | forumone/f1ux:node-v4-php-7.4-ruby-2.3  |
+| v4           | 8.0         | 2.3          | forumone/f1ux:node-v4-php-8.0-ruby-2.3  |
 | v6           | 5.6         | 2.3          | forumone/f1ux:node-v6-php-5.6-ruby-2.3  |
 | v6           | 7.0         | 2.3          | forumone/f1ux:node-v6-php-7.0-ruby-2.3  |
 | v6           | 7.1         | 2.3          | forumone/f1ux:node-v6-php-7.1-ruby-2.3  |
 | v6           | 7.2         | 2.3          | forumone/f1ux:node-v6-php-7.2-ruby-2.3  |
 | v6           | 7.3         | 2.3          | forumone/f1ux:node-v6-php-7.3-ruby-2.3  |
 | v6           | 7.4         | 2.3          | forumone/f1ux:node-v6-php-7.4-ruby-2.3  |
+| v6           | 8.0         | 2.3          | forumone/f1ux:node-v6-php-8.0-ruby-2.3  |
 | v8           | 5.6         | 2.3          | forumone/f1ux:node-v8-php-5.6-ruby-2.3  |
 | v8           | 7.0         | 2.3          | forumone/f1ux:node-v8-php-7.0-ruby-2.3  |
 | v8           | 7.1         | 2.3          | forumone/f1ux:node-v8-php-7.1-ruby-2.3  |
 | v8           | 7.2         | 2.3          | forumone/f1ux:node-v8-php-7.2-ruby-2.3  |
 | v8           | 7.3         | 2.3          | forumone/f1ux:node-v8-php-7.3-ruby-2.3  |
 | v8           | 7.4         | 2.3          | forumone/f1ux:node-v8-php-7.4-ruby-2.3  |
+| v8           | 8.0         | 2.3          | forumone/f1ux:node-v8-php-8.0-ruby-2.3  |
 | v10          | 5.6         | 2.3          | forumone/f1ux:node-v10-php-5.6-ruby-2.3 |
 | v10          | 7.0         | 2.3          | forumone/f1ux:node-v10-php-7.0-ruby-2.3 |
 | v10          | 7.1         | 2.3          | forumone/f1ux:node-v10-php-7.1-ruby-2.3 |
 | v10          | 7.2         | 2.3          | forumone/f1ux:node-v10-php-7.2-ruby-2.3 |
 | v10          | 7.3         | 2.3          | forumone/f1ux:node-v10-php-7.3-ruby-2.3 |
 | v10          | 7.4         | 2.3          | forumone/f1ux:node-v10-php-7.4-ruby-2.3 |
+| v10          | 8.0         | 2.3          | forumone/f1ux:node-v10-php-8.0-ruby-2.3 |
 | v12          | 5.6         | 2.3          | forumone/f1ux:node-v12-php-5.6-ruby-2.3 |
 | v12          | 7.0         | 2.3          | forumone/f1ux:node-v12-php-7.0-ruby-2.3 |
 | v12          | 7.1         | 2.3          | forumone/f1ux:node-v12-php-7.1-ruby-2.3 |
 | v12          | 7.2         | 2.3          | forumone/f1ux:node-v12-php-7.2-ruby-2.3 |
 | v12          | 7.3         | 2.3          | forumone/f1ux:node-v12-php-7.3-ruby-2.3 |
 | v12          | 7.4         | 2.3          | forumone/f1ux:node-v12-php-7.4-ruby-2.3 |
+| v12          | 8.0         | 2.3          | forumone/f1ux:node-v12-php-8.0-ruby-2.3 |
 
 </details>
 
@@ -58,30 +63,35 @@ This repo builds multiple images for older Forum One themes. We provide builds f
 | v4           | 7.2         | forumone/gesso:2-node-v4-php-7.2  |
 | v4           | 7.3         | forumone/gesso:2-node-v4-php-7.3  |
 | v4           | 7.4         | forumone/gesso:2-node-v4-php-7.4  |
+| v4           | 8.0         | forumone/gesso:2-node-v4-php-8.0  |
 | v6           | 5.6         | forumone/gesso:2-node-v6-php-5.6  |
 | v6           | 7.0         | forumone/gesso:2-node-v6-php-7.0  |
 | v6           | 7.1         | forumone/gesso:2-node-v6-php-7.1  |
 | v6           | 7.2         | forumone/gesso:2-node-v6-php-7.2  |
 | v6           | 7.3         | forumone/gesso:2-node-v6-php-7.3  |
 | v6           | 7.4         | forumone/gesso:2-node-v6-php-7.4  |
+| v6           | 8.0         | forumone/gesso:2-node-v6-php-8.0  |
 | v8           | 5.6         | forumone/gesso:2-node-v8-php-5.6  |
 | v8           | 7.0         | forumone/gesso:2-node-v8-php-7.0  |
 | v8           | 7.1         | forumone/gesso:2-node-v8-php-7.1  |
 | v8           | 7.2         | forumone/gesso:2-node-v8-php-7.2  |
 | v8           | 7.3         | forumone/gesso:2-node-v8-php-7.3  |
 | v8           | 7.4         | forumone/gesso:2-node-v8-php-7.4  |
+| v8           | 8.0         | forumone/gesso:2-node-v8-php-8.0  |
 | v10          | 5.6         | forumone/gesso:2-node-v10-php-5.6 |
 | v10          | 7.0         | forumone/gesso:2-node-v10-php-7.0 |
 | v10          | 7.1         | forumone/gesso:2-node-v10-php-7.1 |
 | v10          | 7.2         | forumone/gesso:2-node-v10-php-7.2 |
 | v10          | 7.3         | forumone/gesso:2-node-v10-php-7.3 |
 | v10          | 7.4         | forumone/gesso:2-node-v10-php-7.4 |
+| v10          | 8.0         | forumone/gesso:2-node-v10-php-8.0 |
 | v12          | 5.6         | forumone/gesso:2-node-v12-php-5.6 |
 | v12          | 7.0         | forumone/gesso:2-node-v12-php-7.0 |
 | v12          | 7.1         | forumone/gesso:2-node-v12-php-7.1 |
 | v12          | 7.2         | forumone/gesso:2-node-v12-php-7.2 |
 | v12          | 7.3         | forumone/gesso:2-node-v12-php-7.3 |
 | v12          | 7.4         | forumone/gesso:2-node-v12-php-7.4 |
+| v12          | 8.0         | forumone/gesso:2-node-v12-php-8.0 |
 
 </details>
 

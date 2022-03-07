@@ -96,7 +96,7 @@ let
 
 in rec {
   # The sha256 digest here is for the .tar.xz of the Node sources
-  node12 = generic { version = "v12.22.4"; sha256 = "44cd4eab131e5282fc923e9e720d983a0b44c12e4aa4f6c3598dc97ae1e4cd4c"; };
+  node12 = generic { version = "v12.22.10"; sha256 = "ad4c8891d54a2c9bb6af436956deead5986b9698b06e6c6d616de429cfb5393a"; };
   grunt12 = grunt node12;
 
   node10 = generic { version = "v10.24.1"; sha256 = "d72fc2c244603b4668da94081dc4d6067d467fdfa026e06a274012f16600480c"; };
