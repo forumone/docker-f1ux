@@ -6,7 +6,7 @@
 , nodeVersions, phpVersions
 }:
 let
-  nodeKeys = [ "12" "10" "8" "6" "4" ];
+  nodeKeys = [ "14" "12" "10" "8" "6" "4" ];
   phpKeys = [ "56" "70" "71" "72" "73" "74" "80" ];
 
   mkImage = nodeKey: phpKey:

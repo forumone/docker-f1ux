@@ -3,6 +3,7 @@
 
   # Build dependencies
 , python2
+, python3
 
   # Grunt
 , nodejs, nodePackages
@@ -34,8 +35,9 @@ let
   # Usage:
   # * version: Full Node.js version (e.g., v4.9.1)
   # * sha256: SHA256 checksum of the .tar.xz source archive
+  # * python: Python derivation (version 2 or 3, used to allow building node v16)
   generic =
-    { version, sha256 }:
+    { version, sha256, python ? python2 }:
     stdenv.mkDerivation {
       pname = "node";
       inherit version;
@@ -47,7 +49,7 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [python2];
+      nativeBuildInputs = [python];
 
       # Point build scripts to the exact Nix store paths rather than /usr/bin/env
       postPatch = ''
@@ -64,7 +66,7 @@ let
           configure=configure
         fi
 
-        python2 $configure ${builtins.concatStringsSep " " configureFlags}
+        python $configure ${builtins.concatStringsSep " " configureFlags}
       '';
 
       # Repatch shebang lines to point to the build Node
@@ -96,7 +98,13 @@ let
 
 in rec {
   # The sha256 digest here is for the .tar.xz of the Node sources
-  node12 = generic { version = "v12.22.10"; sha256 = "ad4c8891d54a2c9bb6af436956deead5986b9698b06e6c6d616de429cfb5393a"; };
+  # node16 = generic { version = "v16.15.0"; sha256 = "a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7"; python = python3; };
+  # grunt16 = grunt node16;
+
+  node14 = generic { version = "v14.19.3"; sha256 = "5cf45b1f1aca77523acf36240c1d53a999279070a7711eabf23346f88b0cc994"; };
+  grunt14 = grunt node14;
+
+  node12 = generic { version = "v12.22.12"; sha256 = "bc42b7f8495b9bfc7f7850dd180bb02a5bdf139cc232b8c6f02a6967e20714f2"; };
   grunt12 = grunt node12;
 
   node10 = generic { version = "v10.24.1"; sha256 = "d72fc2c244603b4668da94081dc4d6067d467fdfa026e06a274012f16600480c"; };
