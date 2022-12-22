@@ -101,7 +101,7 @@ in rec {
   # node16 = generic { version = "v16.15.0"; sha256 = "a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7"; python = python3; };
   # grunt16 = grunt node16;
 
-  node14 = generic { version = "v14.19.3"; sha256 = "5cf45b1f1aca77523acf36240c1d53a999279070a7711eabf23346f88b0cc994"; };
+  node14 = generic { version = "v14.21.1"; sha256 = "3db95d6ca728957bf090b6301a7a9d2d80714b2a06d898a1db65c6e42b1da7ac"; };
   grunt14 = grunt node14;
 
   node12 = generic { version = "v12.22.12"; sha256 = "bc42b7f8495b9bfc7f7850dd180bb02a5bdf139cc232b8c6f02a6967e20714f2"; };
