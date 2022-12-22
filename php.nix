@@ -162,10 +162,10 @@ let
 in
 rec {
   # NB. sha256 is of the .tar.bz2 archive (see php.net/downloads and php.net/releases)
-  php80 = generic { version = "8.0.16"; sha256 = "f49f8181ee29463a0d23a0c65969e92d58fee8ac564df917cff58e48d65e1849"; };
+  php80 = generic { version = "8.0.24"; sha256 = "908e17cea331d5abb8506b4a89c6392b962e127c391327777c7485eb4b415d43"; };
   composer80 = composer php80;
 
-  php74 = generic { version = "7.4.28"; sha256 = "2085086a863444b0e39547de1a4969fd1c40a0c188eb58fab2938b649b0c4b58"; };
+  php74 = generic { version = "7.4.33"; sha256 = "4e8117458fe5a475bf203128726b71bcbba61c42ad463dffadee5667a198a98a"; };
   composer74 = composer php74;
 
   php73 = generic { version = "7.3.33"; sha256 = "f412487d7d953437e7978a0d7b6ec99bf4a85cf3378014438a8577b89535451a"; };
