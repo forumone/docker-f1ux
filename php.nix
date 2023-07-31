@@ -162,26 +162,17 @@ let
 in
 rec {
   # NB. sha256 is of the .tar.bz2 archive (see php.net/downloads and php.net/releases)
-  php80 = generic { version = "8.0.24"; sha256 = "908e17cea331d5abb8506b4a89c6392b962e127c391327777c7485eb4b415d43"; };
+  php82 = generic { version = "8.2.8"; sha256 = "995ed4009c7917c962d31837a1a3658f36d4af4f357b673c97ffdbe6403f8517"; };
+  composer82 = composer php82;
+
+  php81 = generic { version = "8.1.21"; sha256 = "6ea49e8335d632177f56b507160aa151c7b020185789a9c14859fce5d4a0776d"; };
+  composer81 = composer php81;
+
+  php80 = generic { version = "8.0.29"; sha256 = "4801a1f0e17170286723ab54acd045ac78a9656021d56f104a64543eec922e12"; };
   composer80 = composer php80;
 
   php74 = generic { version = "7.4.33"; sha256 = "4e8117458fe5a475bf203128726b71bcbba61c42ad463dffadee5667a198a98a"; };
   composer74 = composer php74;
-
-  php73 = generic { version = "7.3.33"; sha256 = "f412487d7d953437e7978a0d7b6ec99bf4a85cf3378014438a8577b89535451a"; };
-  composer73 = composer php73;
-
-  php72 = generic { version = "7.2.34"; sha256 = "0e5816d668a2bb14aca68cef8c430430bd86c3c5233f6c427d1a54aac127abcf"; };
-  composer72 = composer php72;
-
-  php71 = generic { version = "7.1.33"; sha256 = "95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b"; };
-  composer71 = composer php71;
-
-  php70 = generic { version = "7.0.33"; sha256 = "4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07"; };
-  composer70 = composer php70;
-
-  php56 = generic { version = "5.6.40"; sha256 = "ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00"; };
-  composer56 = composer php56;
 
   inherit removeMemoryLimit;
 }
