@@ -109,13 +109,4 @@ in rec {
 
   node10 = generic { version = "v10.24.1"; sha256 = "d72fc2c244603b4668da94081dc4d6067d467fdfa026e06a274012f16600480c"; };
   grunt10 = grunt node10;
-
-  node8 = generic { version = "v8.17.0"; sha256 = "5b0d96db482b273f0324c299ead86ecfbc5d033516e5fc37c92cfccb933ef6ff"; };
-  grunt8 = grunt node8;
-
-  node6 = generic { version = "v6.17.1"; sha256 = "6f6dc9624656a008513b7608bfc105dd92ceea5d7b4516edeca7e6b19d2edd94"; };
-  grunt6 = grunt node6;
-
-  node4 = generic { version = "v4.9.1"; sha256 = "d7d1232f948391699c6e98780ac90bdf5889902d639bad41561ac29f03dad401"; };
-  grunt4 = grunt node4;
 }
